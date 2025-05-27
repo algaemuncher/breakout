@@ -15,7 +15,7 @@ int i;
 int j;
 float sVolume = 1;
 
-int bricks = 9;
+int bricks = 20;
 float brickd = 30;
 int [] brickX;
 int [] brickY;
@@ -42,18 +42,41 @@ void setup() {
   vy = 8;
   ax = 0;
 
-  j=0;
-  i=0;
-  while (j<3) {
-    while (i<3) {
-      brickX[i+ j*3] = i*200 + 100;
-      brickY[i+ j*3] = j*75 + 100;
-      alive[i + j*3] = true;
-      i=i+1;
+  //j=0;
+  //i=0;
+  //while (j<3) {
+  //  while (i<4) {
+  //print(i, j, i+ j*3, i*100 + 100, j*75 + 100, " ");
+  //    brickX[i+ j*3] = i*100 + 100;
+  //    brickY[i+ j*3] = j*75 + 100;
+  //    alive[i + j*3] = true;
+  //    i=i+1;
+  //  }
+  //  println("");
+  //  i=0;
+  //  j= j+1;
+  //}
+  int i = 0;
+  int j = 100;
+  int k = 60;
+  while (i < bricks) {
+    print(i, j, i+ j*3, i*100 + 100, j*75 + 100, " ");
+    brickX[i] = j;
+    brickY[i] = k;
+    alive[i] = true;
+    j += 100;
+    i++;
+    if (j > 500) {
+      j = 100;
+      k += 70;
     }
-    i=0;
-    j= j+1;
   }
+
+
+
+
+  println(brickX);
+  println(brickY);
 }
 
 void draw() {
@@ -63,6 +86,7 @@ void draw() {
   } else if (gamestate == paused) {
     paused();
   } else if (gamestate == game_over) {
+    game_over();
   }
 }
 
@@ -102,18 +126,19 @@ void ball() {
     if (player1x < bx+ bd/2 && bx - bd/2 < player1x+player1w && player1y < by + bd/2 && by- bd/2 < player1y + player1h) {
       vy = -vy;
       if (player1x < bx+ bd/2 && bx+ bd/2 < player1x+20 && player1y < (by + bd/2) && by- bd/2 < player1y + player1h) {
-        vx = -vx + abs(ax) * -1;
+        vx = -vx + abs(ax) * -1; 
         bx += abs(ax) * -1;
       }
-      if (player1x+player1w-20 < bx+ bd/2 && bx+ bd/2 < player1x+player1w && player1y < (by + bd/2) && by- bd/2 < player1y + player1h) {
-        vx = vx*-1 + ax;
-        bx += ax;
+      if (player1x+player1w-20 < bx- bd/2 && bx- bd/2 < player1x+player1w && player1y < (by + bd/2) && by- bd/2 < player1y + player1h) {
+        vx = vx*-1 + abs(ax);
+        bx += abs(ax);
       }
       bx += vx;
       by += vy;
       break;
     }
   }
+  fill(255);
   circle(bx, by, bd);
 }
 
