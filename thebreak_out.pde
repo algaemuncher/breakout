@@ -1,5 +1,4 @@
 import processing.sound.*;
-
 SoundFile bgMusic;
 
 float vx, vy;
@@ -10,6 +9,9 @@ float player1x = 300, player1y = 550;
 float ax;
 
 boolean aKey, dKey;
+
+int points,lives;
+PFont livesFont;
 
 int i;
 int j;
@@ -35,6 +37,7 @@ void setup() {
   brickX = new int[bricks];
   brickY = new int[bricks];
   alive = new boolean[bricks];
+  livesFont = loadFont("NotoSansSymbols-VariableFont_wght.ttf");
   bx = 300;
   by = 350;
   bd = 20;
@@ -60,7 +63,7 @@ void setup() {
   int j = 100;
   int k = 60;
   while (i < bricks) {
-    print(i, j, i+ j*3, i*100 + 100, j*75 + 100, " ");
+    //print(i, j, i+ j*3, i*100 + 100, j*75 + 100, " ");
     brickX[i] = j;
     brickY[i] = k;
     alive[i] = true;
@@ -75,8 +78,8 @@ void setup() {
 
 
 
-  println(brickX);
-  println(brickY);
+  //println(brickX);
+  //println(brickY);
 }
 
 void draw() {
@@ -101,8 +104,14 @@ void keyReleased() {
 }
 
 void p1move() {
-  if (aKey) ax -= 1;
-  if (dKey) ax += 1;
+  if (aKey) {
+    ax -= 1;
+    if (player1x<0) ax += 1;
+  }
+  if (dKey) {
+    ax += 1;
+    if (player1x + player1w > width) ax-=1;
+  }
   ax = ax * 0.875;
   player1x += ax;
 }
@@ -112,13 +121,23 @@ void ball() {
   while (j<8) {
     bx += vx/8;
     by += vy/8;
-    if (bx <= 0 + bd/2 || bx >= width - bd/2) {
-      vx = -vx;
+    if (bx <= 0 + bd/2) {
+      vx = abs(vx);
       bx += vx;
       break;
     }
-    if (by <= 0 + bd/2 || by >= height - bd/2) {
-      vy = -vy;
+    if (bx >= width - bd/2) {
+      vx = abs(vx) * -1;
+      bx += vx;
+      break;
+    }
+    if (by <= 0 + bd/2) {
+      vy = abs(vy);
+      by += vy;
+      break;
+    }
+    if (by >= height - bd/2) {
+      vy = abs(vy) * -1;
       by += vy;
       break;
     }
@@ -126,22 +145,21 @@ void ball() {
     if (player1x < bx+ bd/2 && bx - bd/2 < player1x+player1w && player1y < by + bd/2 && by- bd/2 < player1y + player1h) {
       vy = -vy;
       if (player1x < bx+ bd/2 && bx+ bd/2 < player1x+20 && player1y < (by + bd/2) && by- bd/2 < player1y + player1h) {
-        vx = -vx + abs(ax) * -1; 
+        vx = -vx + abs(ax) * -1;
         bx += abs(ax) * -1;
       }
       if (player1x+player1w-20 < bx- bd/2 && bx- bd/2 < player1x+player1w && player1y < (by + bd/2) && by- bd/2 < player1y + player1h) {
-        vx = vx*-1 + abs(ax);
+        vx = -vx + abs(ax);
         bx += abs(ax);
       }
       bx += vx;
       by += vy;
+      while (player1x < bx+ bd/2 && bx - bd/2 < player1x+player1w && player1y < by + bd/2 && by- bd/2 < player1y + player1h == true) {
+        by+=vy;
+      }
       break;
     }
   }
   fill(255);
   circle(bx, by, bd);
 }
-
-void player() {
-}
-//class
