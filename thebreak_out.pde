@@ -33,7 +33,7 @@ int [] brickY;
 boolean [] alive;
 
 iBricks i2;
-int iBricksAmount=80;
+int iBricksAmount=90;
 iBricks[] ito = new iBricks[iBricksAmount];
 
 
@@ -42,12 +42,13 @@ final int intro = 0;
 final int playing = 1;
 final int paused = 2;
 final int game_over = 3;
+final int win = 4;
 
 String[] fontlist = PFont.list();
 void setup() {
   size(600, 600);
   background(0);
-  gamestate = intro;
+  gamestate = win;
   //bgMusic = new SoundFile(this, "");
   brickX = new int[bricks];
   brickY = new int[bricks];
@@ -67,7 +68,7 @@ void setup() {
   explosion = new PImage[gifFrames];
   i = 0;
   while (i<gifFrames){
-    explosion[i] = loadImage("frame_"+i+"_delay-0.1s.gif");
+    explosion[i] = loadImage("gif/frame_"+i+"_delay-0.1s.gif");
     i+=1;
   }
   //j=0;
@@ -121,6 +122,8 @@ void draw() {
     paused();
   } else if (gamestate == game_over) {
     game_over();
+  } else if (gamestate == win){
+    win();
   }
 }
 
