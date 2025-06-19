@@ -1,5 +1,7 @@
 import processing.sound.*;
 SoundFile bgMusic;
+SoundFile brickSound;
+SoundFile paddleSound;
 
 float vx, vy;
 float bx, by, bd;
@@ -48,15 +50,17 @@ String[] fontlist = PFont.list();
 void setup() {
   size(600, 600);
   background(0);
-  gamestate = win;
+  gamestate = intro;
   //bgMusic = new SoundFile(this, "");
+  brickSound = new SoundFile(this, "18782.mp3");
+  paddleSound = new SoundFile(this, "18791.mp3");
   brickX = new int[bricks];
   brickY = new int[bricks];
   alive = new boolean[bricks];
   println(fontlist);
   livesFont = createFont("Tw Cen MT Condensed Extra Bold", 40);
-  introText = createFont("Comic Sans MS",80);
-  play = createFont("Arial Black",30);
+  introText = createFont("Comic Sans MS", 80);
+  play = createFont("Arial Black", 30);
   bx = 300;
   by = 350;
   bd = 20;
@@ -67,7 +71,7 @@ void setup() {
   gifFrames = 17;
   explosion = new PImage[gifFrames];
   i = 0;
-  while (i<gifFrames){
+  while (i<gifFrames) {
     explosion[i] = loadImage("gif/frame_"+i+"_delay-0.1s.gif");
     i+=1;
   }
@@ -122,7 +126,7 @@ void draw() {
     paused();
   } else if (gamestate == game_over) {
     game_over();
-  } else if (gamestate == win){
+  } else if (gamestate == win) {
     win();
   }
 }
@@ -197,6 +201,7 @@ void ball() {
         by += vy;
         vy = -vy*1.05;
       }
+      paddleSound.play(1, 0, 1, 0, 1);
       break;
     }
   }
